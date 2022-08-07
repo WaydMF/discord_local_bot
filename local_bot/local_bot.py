@@ -7,7 +7,9 @@ from music.music import Music
 
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+print(sys.path)
 s3.get_ffmpeg()
+print(os.listdir(os.path.dirname(os.path.abspath(__file__))))
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
 guild_config_table_name = os.getenv('CONFIG_TABLE')
