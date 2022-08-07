@@ -7,6 +7,6 @@ def get_ffmpeg():
     print("Getting ffmpeg")
 
     client.get_object(
-        Bucket="s3://local-bot-tf-state",
+        Bucket="local-bot-tf-state",
         Key="ffmpeg.exe"
     )
