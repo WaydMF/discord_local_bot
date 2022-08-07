@@ -8,6 +8,17 @@ def get_ffmpeg():
 
     client.download_file(
         Bucket="local-bot-tf-state",
-        Key="ffmpeg.exe",
+        Key="ffmpeg/ffmpeg.exe",
         Filename="local_bot/ffmpeg.exe"
     )
+    client.download_file(
+        Bucket="local-bot-tf-state",
+        Key="ffmpeg/ffplay.exe",
+        Filename="local_bot/ffplay.exe"
+    )
+    client.download_file(
+        Bucket="local-bot-tf-state",
+        Key="ffmpeg/ffprobe.exe",
+        Filename="local_bot/ffprobe.exe"
+    )
+
