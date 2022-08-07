@@ -6,7 +6,8 @@ client = boto3.client('s3', region_name="eu-west-2")
 def get_ffmpeg():
     print("Getting ffmpeg")
 
-    client.get_object(
+    client.download_file(
         Bucket="local-bot-tf-state",
-        Key="ffmpeg.exe"
+        Key="ffmpeg.exe",
+        Filename="ffmpeg.exe"
     )
