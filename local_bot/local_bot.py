@@ -13,7 +13,7 @@ guild_config_table_name = os.getenv('CONFIG_TABLE')
 
 def get_prefix(bot, message):
     """Gets prefix for specific guild."""
-    guild_prefixes = dynamodb.get_prefixes(guild_config_table_name, message.guild.id)
+    guild_prefixes = dynamodb.get_prefixes(guild_config_table_name, str(message.guild.id))
 
     for prefix in guild_prefixes:
         if message.content.startswith(prefix):
@@ -28,14 +28,14 @@ local_bot.add_cog(Music(local_bot))
 async def on_guild_join(guild):
     """Sets the prefix for new guild."""
 
-    dynamodb.add_prefixes(guild_config_table_name, guild.id, default_command_prefix)
+    dynamodb.add_prefixes(guild_config_table_name, str(guild.id), default_command_prefix)
 
 
 @local_bot.command(name="show_prefixes", aliases=["prefixes"])
 async def show_prefixes(ctx: commands.Context):
     """Shows the prefixes for guild by admin command."""
 
-    guild_prefixes = dynamodb.get_prefixes(guild_config_table_name, ctx.guild.id)
+    guild_prefixes = dynamodb.get_prefixes(guild_config_table_name, str(ctx.guild.id))
 
     await ctx.send(f"Prefixes: {guild_prefixes}")
 
@@ -47,7 +47,7 @@ async def remove_prefix(ctx: commands.Context):
     command_part_of_message = f"{ctx.prefix}{ctx.command.name} "
     rm_prefixes = ctx.message.content[len(command_part_of_message):].split()
 
-    dynamodb.remove_prefixes(guild_config_table_name, ctx.guild.id, rm_prefixes)
+    dynamodb.remove_prefixes(guild_config_table_name, str(ctx.guild.id), rm_prefixes)
 
 
 @local_bot.command(name="add_prefix", aliases=["add_prefixes"])
@@ -56,7 +56,7 @@ async def add_prefix(ctx: commands.Context):
 
     command_part_of_message = f"{ctx.prefix}{ctx.command.name} "
     new_prefixes = ctx.message.content[len(command_part_of_message):].split()
-    dynamodb.add_prefixes(guild_config_table_name, ctx.guild.id, new_prefixes)
+    dynamodb.add_prefixes(guild_config_table_name, str(ctx.guild.id), new_prefixes)
 
 
 @local_bot.event
