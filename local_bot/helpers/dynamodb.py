@@ -41,7 +41,7 @@ def add_prefixes(table_name, guild_id, add_prefixes_list):
                     'N': guild_id
                 },
                 "PrefixesSet": {
-                    'SS': new_prefixes
+                    'SS': list(new_prefixes)
                 }
             }
         )
@@ -81,7 +81,7 @@ def remove_prefixes(table_name, guild_id, rm_prefixes):
                 'N': guild_id
             },
             "PrefixesSet": {
-                'SS': new_prefixes
+                'SS': list(new_prefixes)
             }
         }
     )

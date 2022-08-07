@@ -30,12 +30,3 @@ resource "aws_iam_user_policy" "local_bot_iam_user_policy" {
     ]
   })
 }
-
-resource "aws_iam_access_key" "local_bot_iam_access_key" {
-  user = aws_iam_user.local_bot_iam_user.name
-}
-
-output "aws_iam_smtp_password_v4" {
-  value     = aws_iam_access_key.local_bot_iam_access_key.ses_smtp_password_v4
-  sensitive = true
-}
