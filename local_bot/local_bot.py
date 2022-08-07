@@ -2,10 +2,10 @@ import os
 
 from discord.ext import commands
 
-from helpers import dynamodb
+from helpers import dynamodb, s3
 from music.music import Music
 
-
+s3.get_ffmpeg()
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
 guild_config_table_name = os.getenv('CONFIG_TABLE')
