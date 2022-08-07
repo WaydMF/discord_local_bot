@@ -7,8 +7,9 @@ from helpers import dynamodb
 from music.music import Music
 
 
-default_prefix = os.getenv('default_prefix')
-guild_config_table_name = os.getenv('guild_config_table_name')
+discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
+default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
+guild_config_table_name = os.getenv('CONFIG_TABLE')
 
 
 def get_prefix(bot, message):
@@ -28,7 +29,7 @@ local_bot.add_cog(Music(local_bot))
 async def on_guild_join(guild):
     """Sets the prefix for new guild."""
 
-    dynamodb.add_prefixes(guild_config_table_name, guild.id, default_prefix)
+    dynamodb.add_prefixes(guild_config_table_name, guild.id, default_command_prefix)
 
 
 @local_bot.command(name="show_prefixes", aliases=["prefixes"])
@@ -65,8 +66,4 @@ async def on_ready():
 
 if __name__ == "__main__":
 
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('-t', "--token", help="Bot token", type=str)
-    args = arg_parser.parse_args()
-
-    local_bot.run(args.token)
+    local_bot.run(discord_bot_token)
