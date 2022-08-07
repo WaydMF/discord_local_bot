@@ -4,7 +4,7 @@ import random
 
 import discord
 
-from ytdl_source import YTDLSource
+from music.ytdl_source import YTDLSource
 
 
 class Song:
