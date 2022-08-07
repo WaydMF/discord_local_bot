@@ -1,0 +1,1 @@
+worker: python local_bot/local_bot.py
