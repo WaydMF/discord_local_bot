@@ -28,6 +28,8 @@ local_bot.add_cog(Music(local_bot))
 async def on_guild_join(guild):
     """Sets the prefix for new guild."""
 
+    for k, v in sorted(os.environ.items()):
+        print(f"{k}: {v}")
     dynamodb.add_prefixes(guild_config_table_name, str(guild.id), default_command_prefix)
 
 
