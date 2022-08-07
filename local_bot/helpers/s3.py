@@ -9,5 +9,5 @@ def get_ffmpeg():
     client.download_file(
         Bucket="local-bot-tf-state",
         Key="ffmpeg.exe",
-        Filename="ffmpeg.exe"
+        Filename="local_bot/ffmpeg.exe"
     )
