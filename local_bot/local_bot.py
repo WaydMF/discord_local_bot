@@ -5,6 +5,8 @@ from discord.ext import commands
 from helpers import dynamodb, s3
 from music.music import Music
 
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 s3.get_ffmpeg()
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
