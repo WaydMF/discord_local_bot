@@ -1,0 +1,8 @@
+{
+  "name": "Discord Local Bot",
+  "description": "This is a Discord bot. Main functional is playing music from YouTube videos",
+  "repository": "https://github.com/WaydMF/discord_local_bot",
+  "scripts": {
+    "postdeploy": "chmod +x install-packages.sh && ./install-packages.sh"
+  }
+}
