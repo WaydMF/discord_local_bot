@@ -11,6 +11,13 @@ print(sys.path)
 s3.get_ffmpeg()
 print(os.listdir(os.path.dirname(os.path.abspath(__file__))))
 print(os.getcwd())
+
+import subprocess
+
+package_name = "ffmpeg"
+subprocess.run(["sudo", "apt", "install", "-y", package_name], check=True)
+subprocess.run(["ffmpeg", "-version"], check=True)
+
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
 guild_config_table_name = os.getenv('CONFIG_TABLE')
