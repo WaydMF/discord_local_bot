@@ -17,7 +17,7 @@ import subprocess
 print("Getting FFMPEG....")
 package_name = "ffmpeg"
 print("first subprocess.run")
-result = subprocess.run(["sudo", "apt", "install", "-y", package_name], capture_output=True, text=True)
+result = subprocess.run(["apt", "install", "-y", package_name], capture_output=True, text=True)
 print("stdout:", result.stdout)
 print("stderr:", result.stderr)
 print("second subprocess.run")
