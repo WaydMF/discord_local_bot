@@ -6,17 +6,24 @@ from helpers import dynamodb, s3
 from music.music import Music
 
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-print(sys.path)
-s3.get_ffmpeg()
-print(os.listdir(os.path.dirname(os.path.abspath(__file__))))
-print(os.getcwd())
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# print(sys.path)
+# s3.get_ffmpeg()
+# print(os.listdir(os.path.dirname(os.path.abspath(__file__))))
+# print(os.getcwd())
 
 import subprocess
 
+print("Getting FFMPEG....")
 package_name = "ffmpeg"
-subprocess.run(["sudo", "apt", "install", "-y", package_name], check=True)
-subprocess.run(["ffmpeg", "-version"], check=True)
+print("first subprocess.run")
+result = subprocess.run(["sudo", "apt", "install", "-y", package_name], check=True, capture_output=True, text=True)
+print("stdout:", result.stdout)
+print("stderr:", result.stderr)
+print("second subprocess.run")
+result = subprocess.run(["ffmpeg", "-version"], check=True, capture_output=True, text=True)
+print("stdout:", result.stdout)
+print("stderr:", result.stderr)
 
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
