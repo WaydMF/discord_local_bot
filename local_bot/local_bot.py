@@ -17,13 +17,14 @@ import subprocess
 print("Getting FFMPEG....")
 package_name = "ffmpeg"
 print("first subprocess.run")
-result = subprocess.run(["sudo", "apt", "install", "-y", package_name], check=True, capture_output=True, text=True)
+result = subprocess.run(["sudo", "apt", "install", "-y", package_name], capture_output=True, text=True)
 print("stdout:", result.stdout)
 print("stderr:", result.stderr)
 print("second subprocess.run")
-result = subprocess.run(["ffmpeg", "-version"], check=True, capture_output=True, text=True)
+result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
 print("stdout:", result.stdout)
 print("stderr:", result.stderr)
+raise Exception
 
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
