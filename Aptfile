@@ -1,9 +1,1 @@
-libavdevice-dev
-libavfilter-dev
-libavformat-dev
-libavcodec-dev
-libpostproc-dev
-libswresample-dev
-libswscale-dev
-libavutil-dev
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/ffmpeg_5.1-2+b1_amd64.deb
+ffmpeg
