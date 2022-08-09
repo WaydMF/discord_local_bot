@@ -1,9 +1,9 @@
+libavdevice-59
+libavfilter-8
+libavformat-59
+libavcodec-59
+libpostproc-56
+libswresample-4
+libswscale-6
+libavutil-57
 http://ftp.debian.org/debian/pool/main/f/ffmpeg/ffmpeg_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavdevice59_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavfilter8_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavformat59_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavcodec59_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libpostproc56_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libswresample4_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libswscale6_5.1-2+b1_amd64.deb
-http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavutil57_5.1-2+b1_amd64.deb
