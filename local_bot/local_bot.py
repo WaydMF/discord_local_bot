@@ -12,22 +12,22 @@ import sys
 # print(os.listdir(os.path.dirname(os.path.abspath(__file__))))
 # print(os.getcwd())
 
-import subprocess
-
-print("Getting FFMPEG....")
-package_name = "ffmpeg"
-result = subprocess.run(["apt", "update"], capture_output=True, text=True)
-print("stdout:", result.stdout)
-print("stderr:", result.stderr)
-print("first subprocess.run")
-result = subprocess.run(["apt", "install", "-y", package_name], capture_output=True, text=True)
-print("stdout:", result.stdout)
-print("stderr:", result.stderr)
-print("second subprocess.run")
-result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
-print("stdout:", result.stdout)
-print("stderr:", result.stderr)
-raise Exception
+# import subprocess
+#
+# print("Getting FFMPEG....")
+# package_name = "ffmpeg"
+# result = subprocess.run(["apt", "update"], capture_output=True, text=True)
+# print("stdout:", result.stdout)
+# print("stderr:", result.stderr)
+# print("first subprocess.run")
+# result = subprocess.run(["apt", "install", "-y", package_name], capture_output=True, text=True)
+# print("stdout:", result.stdout)
+# print("stderr:", result.stderr)
+# print("second subprocess.run")
+# result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
+# print("stdout:", result.stdout)
+# print("stderr:", result.stderr)
+# raise Exception
 
 discord_bot_token = os.getenv("DISCORD_BOT_TOKEN")
 default_command_prefix = os.getenv('DEFAULT_COMMAND_PREFIX')
