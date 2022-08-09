@@ -5,3 +5,4 @@ http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavformat59_5.1-2+b1_amd64.deb
 http://ftp.debian.org/debian/pool/main/f/ffmpeg/libavcodec59_5.1-2+b1_amd64.deb
 http://ftp.debian.org/debian/pool/main/f/ffmpeg/libpostproc56_5.1-2+b1_amd64.deb
 http://ftp.debian.org/debian/pool/main/f/ffmpeg/libswresample4_5.1-2+b1_amd64.deb
+http://ftp.debian.org/debian/pool/main/f/ffmpeg/libswscale6_5.1-2+b1_amd64.deb
