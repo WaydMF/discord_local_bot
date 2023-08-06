@@ -1,16 +1,20 @@
 import argparse
 
+import discord
 from discord.ext import commands
 
 from music.music import Music
 
 
-local_bot = commands.Bot(command_prefix=('-', '!'), description="Local Bot")
-local_bot.add_cog(Music(local_bot))
+intents = discord.Intents.default()
+intents.message_content = True
+
+local_bot = commands.Bot(command_prefix=('-', '!'), description="Local Bot", intents=intents)
 
 
 @local_bot.event
 async def on_ready():
+    await local_bot.add_cog(Music(local_bot))
     print(f"Logged in as:\n{local_bot.user.name}\n{local_bot.user.id}")
 
 
