@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import discord
 from discord.ext import commands
@@ -17,11 +18,14 @@ async def on_ready():
     await local_bot.add_cog(Music(local_bot))
     print(f"Logged in as:\n{local_bot.user.name}\n{local_bot.user.id}")
 
-
-arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument('-t', "--token", help="Bot token", type=str)
-args = arg_parser.parse_args()
+if os.getenv('DISCORD_BOT_TOKEN'):
+    DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+else:
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('-t', "--token", help="Bot token", type=str)
+    args = arg_parser.parse_args()
+    DISCORD_BOT_TOKEN = args.token
 
 
 if __name__ == "__main__":
-    local_bot.run(args.token)
+    local_bot.run(DISCORD_BOT_TOKEN)
