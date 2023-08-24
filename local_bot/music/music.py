@@ -3,9 +3,9 @@ import math
 import discord
 from discord.ext import commands
 
-from song import Song
-from voice_state import VoiceState, VoiceError
-from ytdl_source import YTDLSource, YTDLError
+from music.song import Song
+from music.voice_state import VoiceState, VoiceError
+from music.ytdl_source import YTDLSource, YTDLError
 
 
 class Music(commands.Cog):

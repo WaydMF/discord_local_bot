@@ -4,8 +4,8 @@ import discord
 from async_timeout import timeout
 from discord.ext import commands
 
-from ytdl_source import YTDLSource
-from song import SongQueue
+from music.ytdl_source import YTDLSource
+from music.song import SongQueue
 
 
 class VoiceError(Exception):
