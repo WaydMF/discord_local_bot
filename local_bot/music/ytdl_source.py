@@ -5,6 +5,8 @@ import discord
 import yt_dlp
 from discord.ext import commands
 
+from music.utils import *
+
 
 class YTDLError(Exception):
     pass
@@ -48,7 +50,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get("title")
         self.thumbnail = data.get("thumbnail")
         self.description = data.get("description")
-        self.duration = self.parse_duration(int(data.get("duration")))
+        self.duration = int(data.get("duration"))
         self.url = data.get("webpage_url")
         self.stream_url = data.get("url")
 
@@ -67,31 +69,20 @@ class YTDLSource(discord.PCMVolumeTransformer):
             raise YTDLError(f"Couldn\'t find anything that matches `{search}`")
 
         if "entries" not in data:
-            processed_info = cls.ytdl.extract_info(data["webpage_url"], download=False)
-
-            yield cls(ctx, discord.FFmpegPCMAudio(processed_info["url"], **cls.FFMPEG_OPTIONS), data=processed_info)
+            processed_info = cls.ytdl.extract_info(data.get('webpage_url'), download=False)
+            if processed_info.get('url'):
+                yield cls(ctx,
+                          discord.FFmpegPCMAudio(processed_info.get('url'), **cls.FFMPEG_OPTIONS),
+                          data=processed_info)
+            else:
+                yield cls(ctx,
+                          discord.FFmpegPCMAudio(processed_info.get('entries')[0].get('url'), **cls.FFMPEG_OPTIONS),
+                          data=processed_info.get('entries')[0])
         else:
 
             for index, entry in enumerate(data["entries"]):
 
                 partial = functools.partial(cls.ytdl.extract_info, entry["url"], download=False)
                 processed_info = await loop.run_in_executor(None, partial)
-                yield cls(ctx, discord.FFmpegPCMAudio(processed_info["url"], **cls.FFMPEG_OPTIONS), data=processed_info)
-
-    @staticmethod
-    def parse_duration(duration: int):
-        minutes, seconds = divmod(duration, 60)
-        hours, minutes = divmod(minutes, 60)
-        days, hours = divmod(hours, 24)
-
-        duration = []
-        if days > 0:
-            duration.append(f"{days} дней")
-        if hours > 0:
-            duration.append(f"{hours} часов")
-        if minutes > 0:
-            duration.append(f"{minutes} минут")
-        if seconds > 0:
-            duration.append(f"{seconds} секунд")
-
-        return ", ".join(duration)
+                yield cls(ctx, discord.FFmpegPCMAudio(processed_info.get('url'), **cls.FFMPEG_OPTIONS),
+                          data=processed_info)

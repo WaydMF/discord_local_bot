@@ -7,6 +7,6 @@ It is controlled with `!` and `-` prefixes.
 
 ## DEPENDENCIES
 
-Python versions 3.6+ (CPython and PyPy) are supported. Other versions and implementations may or may not work correctly.
+Python versions 3.8+ (CPython and PyPy) are supported. Other versions and implementations may or may not work correctly.
 
 * [**ffmpeg** and **ffprobe**](https://www.ffmpeg.org)

@@ -4,30 +4,28 @@ import random
 
 import discord
 
-from music.ytdl_source import YTDLSource
-
 
 class Song:
     __slots__ = ("source", "requester")
 
-    def __init__(self, source: YTDLSource):
+    def __init__(self, source):
         self.source = source
         self.requester = source.requester
 
     def get_embed(self):
-        embed = (discord.Embed(title="Сейчас играет",
-                               description=f"```css\n{self.source.title}\n```",
-                               color=discord.Color.blurple())
-                 .add_field(name="Длительность", value=self.source.duration)
-                 .add_field(name="Запросил", value=self.requester.mention)
-                 .add_field(name="Автор видео", value=f"[{self.source.uploader}]({self.source.uploader_url})")
-                 .add_field(name="Ссылка", value=f"[Click]({self.source.url})")
+        embed = (discord.Embed(title="Is playing right now", color=discord.Color.blurple(),
+                               description=f"```css\n{self.source.title}\n```")
+                 .add_field(name="Duration", value=self.source.duration)
+                 .add_field(name="Requester", value=self.requester.mention)
+                 .add_field(name="Uploader", value=f"[{self.source.uploader}]({self.source.uploader_url})")
+                 .add_field(name="URL", value=f"[Click]({self.source.url})")
                  .set_thumbnail(url=self.source.thumbnail))
-
         return embed
 
 
 class SongQueue(asyncio.Queue):
+    _queue = None
+
     def __getitem__(self, item):
         if isinstance(item, slice):
             return list(itertools.islice(self._queue, item.start, item.stop, item.step))

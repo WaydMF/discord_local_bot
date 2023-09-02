@@ -6,6 +6,7 @@ from discord.ext import commands
 from music.song import Song
 from music.voice_state import VoiceState, VoiceError
 from music.ytdl_source import YTDLSource, YTDLError
+from music.utils import *
 
 
 class Music(commands.Cog):
@@ -27,7 +28,7 @@ class Music(commands.Cog):
 
     def cog_check(self, ctx: commands.Context):
         if not ctx.guild:
-            raise commands.NoPrivateMessage("Эта команда не используется в ЛС (Личные сообщения)")
+            raise commands.NoPrivateMessage("You can't DM this bot")
 
         return True
 
@@ -35,7 +36,7 @@ class Music(commands.Cog):
         ctx.voice_state = self.get_voice_state(ctx)
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        await ctx.send(f"Меня это пугает. Произошла какая-то ошибка: {str(error)}")
+        await ctx.send(f"Oops, there is an error: {str(error)}")
 
     @commands.command(name="join", invoke_without_subcommand=True)
     async def _join(self, ctx: commands.Context):
@@ -56,7 +57,8 @@ class Music(commands.Cog):
         """
 
         if not channel and not ctx.author.voice:
-            raise VoiceError("Вы не подключены к голосовому каналу. И не указали куда подключаться.")
+            raise VoiceError("You are not connected to any of the voice channels and "
+                             "have not specified which channel to connect to.")
 
         destination = channel or ctx.author.voice.channel
         if ctx.voice_state.voice:
@@ -71,7 +73,7 @@ class Music(commands.Cog):
         """Clears the queue and leaves the voice channel."""
 
         if not ctx.voice_state.voice:
-            return await ctx.send("Бот и так не подключен. Зачем его кикать?")
+            return await ctx.send("Bot isn't connected. You can't kick it.")
 
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
@@ -81,14 +83,14 @@ class Music(commands.Cog):
         """Sets the volume of the player."""
 
         if not ctx.voice_state.is_playing:
-            return await ctx.send("Сейчас музыка не играет. Можете включить.")
+            return await ctx.send("Nothing is playing at the moment.")
 
         if not 0 <= volume <= 100:
-            return await ctx.send("Громкость должна быть между 0 и 100!")
+            return await ctx.send("Volume must have a value between 0 and 100!")
 
         ctx.voice_state.volume = volume / 100
         ctx.voice_state.current.source.volume = volume / 100
-        await ctx.send(f"Громкость изменена на {volume}%")
+        await ctx.send(f"Volume is set to {volume}%")
 
     @commands.command(name="now", aliases=["current", "playing"])
     async def _now(self, ctx: commands.Context):
@@ -127,7 +129,7 @@ class Music(commands.Cog):
         """Skips a song."""
 
         if not ctx.voice_state.is_playing:
-            return await ctx.send("Сейчас музыка не играет,зачем её пропускать? Можете включить.")
+            return await ctx.send("Music isn't playing right now, so nothing to skip.")
 
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
@@ -139,7 +141,7 @@ class Music(commands.Cog):
         """
 
         if len(ctx.voice_state.songs) == 0:
-            return await ctx.send("В очереди нет треков. Можете добавить.")
+            return await ctx.send("There are no tracks in the queue.")
 
         items_per_page = 10
         pages = math.ceil(len(ctx.voice_state.songs) / items_per_page)
@@ -160,7 +162,7 @@ class Music(commands.Cog):
         """Shuffles the queue."""
 
         if len(ctx.voice_state.songs) == 0:
-            return await ctx.send("В очереди нет треков. Можете добавить.")
+            return await ctx.send("There are no tracks in the queue.")
 
         ctx.voice_state.songs.shuffle()
         await ctx.message.add_reaction('✅')
@@ -170,7 +172,7 @@ class Music(commands.Cog):
         """Removes a song from the queue at a given index."""
 
         if len(ctx.voice_state.songs) == 0:
-            return await ctx.send("В очереди нет треков. Можете добавить.")
+            return await ctx.send("There are no tracks in the queue.")
 
         ctx.voice_state.songs.remove(index - 1)
         await ctx.message.add_reaction('✅')
@@ -182,14 +184,14 @@ class Music(commands.Cog):
         """
 
         if not ctx.voice_state.is_playing:
-            return await ctx.send("Ничего не играет в данный момент.")
+            return await ctx.send("Nothing is playing at the moment.")
 
         # Inverse boolean value to loop and unloop.
         ctx.voice_state.loop = not ctx.voice_state.loop
         if ctx.voice_state.loop:
-            await ctx.send("Зациклено")
+            await ctx.send("Looped")
         else:
-            await ctx.send("Разциклено")
+            await ctx.send("Unlooped")
         await ctx.message.add_reaction('✅')
 
     @commands.command(name="play", aliases=["p"])
@@ -208,34 +210,41 @@ class Music(commands.Cog):
             ctx.voice_state.prepare_audio_player()
 
         async with ctx.typing():
+
             try:
                 full_duration = 0
                 sources_list = []
+
+                if 'spotify' in search:
+                    track_id = search.split('/')[-1]
+                    track_result = self.bot.spotify_client.track(track_id)
+                    result_item = track_result
+                    search = f"{result_item.get('name')} - {result_item.get('artists')[0].get('name')}"
                 async for source in YTDLSource.create_sources(ctx, search, loop=self.bot.loop):
                     song = Song(source)
                     full_duration += int(source.data.get("duration"))
                     await ctx.voice_state.songs.put(song)
                     sources_list.append(str(source))
 
-                full_duration = YTDLSource.parse_duration(full_duration)
+                full_duration = parse_duration(full_duration)
                 if len(sources_list) > 1:
                     sources_list = '\n'.join(sources_list)
                     if len(sources_list) > 1000:
-                        await ctx.send(f"Успешно добавлен большой плейлист общей длительностю {full_duration}")
+                        await ctx.send(f"Playlist with {full_duration} duration has been added")
                     else:
-                        await ctx.send(f"Успешно добавлено:\n{sources_list}\nОбщая длительность: {full_duration}")
+                        await ctx.send(f"Successfully added:\n{sources_list}\nDuration: {full_duration}")
                 else:
                     sources_list = '\n'.join(sources_list)
-                    await ctx.send(f"Успешно добавлено:\n{sources_list}\n")
+                    await ctx.send(f"Successfully added:\n{sources_list}\n")
             except YTDLError as e:
-                await ctx.send(f"Произошла ошибка при обработке этого запроса: {str(e)}")
+                await ctx.send(f"Error during request processing: {str(e)}")
 
     @_join.before_invoke
     @_play.before_invoke
     async def ensure_voice_state(self, ctx: commands.Context):
         if not ctx.author.voice or not ctx.author.voice.channel:
-            raise commands.CommandError("Сначала подключись к голосовому.")
+            raise commands.CommandError("You need to connect to the voice channel firstly.")
 
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:
-                raise commands.CommandError("Бот уже подключен с голосовому каналу.")
+                raise commands.CommandError("Bot is already connected to the voice channel.")
